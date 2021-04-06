@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Login</title>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+   <div class="col marginContainer">
+    <h1 class="heading">Login</h1>
+       <input type="text" placeholder="Username" id="usrname">
+       <input type="password" placeholder="Password" id="pass">
+       <select name="" id="group" >
+           <option value="Charity">Charity</option>
+           <option value="Store">Store</option>
+       </select>
+       <button class="outlinebtn" id="login">Login</button>
+   </div>
+   <div class="col marginContainer">
+    <img src="/static/images/login.png" class="loginimg">
+   </div>
+</div>
+<script>
+    document.getElementById("login").onclick =function () {
+        var usrname = document.getElementById("usrname").value;
+        var pass = document.getElementById("pass").value;
+        var group = document.getElementById("group").value;
+
+        if (usrname === "") alert("Please insert username");
+        else if (pass === "") alert("Please insert password");
+        else if (group === "") alert("please select group");
+        else {
+            var link = "http://127.0.0.1:5000/login/" + usrname + "/" + pass + "/" + group;
+          
+            window.location.href = link;
+        }
+
+    }
+</script>
+{% endblock %}

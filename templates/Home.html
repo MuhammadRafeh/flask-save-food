@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+{% block body %}
+<div class="pg">
+        <h1 class="mainheading">Save Food</h1>
+        <button class="outlinebtncenter" id="login">Login</button>
+        <button class="filledbtncenter" id="signup">SignUp</button>
+        <button type="button" class="checkoutbtncenter" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="QRcode">Checkout</button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload QRcode</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" enctype="multipart/form-data" action="http://localhost:5000/uploader">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <input class="form-control form-control-lg" id="formFileLg" type="file" name='file'>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" value="Upload">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+        modalTitle.textContent = 'Upload ' + recipient
+        modalBodyInput.value = recipient
+    })
+
+    document.getElementById("login").onclick = function () {
+        window.location.href = "http://127.0.0.1:5000/login";
+    }
+    document.getElementById("signup").onclick = function () {
+        window.location.href = "http://127.0.0.1:5000/signup";
+    }
+    // document.getElementById("checkout").onclick = function () {
+    //     window.location.href = "http://127.0.0.1:5000/uploader";
+    // }
+
+</script>
+{% endblock %}

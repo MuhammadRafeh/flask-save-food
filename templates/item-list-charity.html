@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Item List</title>
+{% endblock %}
+
+{% block body %}
+<div class="header-container">
+    <img src="/static/images/charityheader.jpg" height="400px" width="100%" alt="">
+    <div class="overlay-card">
+        <h3>Item List</h3>
+        <hr>
+        <label>Total number of item types: 10</label>
+        <hr>
+        <label>We are here for support</label>
+        <video width="400" height="240" autoplay muted>
+            <source src="/static/video/care.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div id="username">Welcome! <label id="usrname">{{usrname}}</label>
+        <button class="filledbtn" id="cartbtn">Go to Cart</button>
+    </div>
+</div>
+<ul>
+    {% for item in items %}
+    <li>
+        <h4>{{item.itemName}}</h4>
+        <label>Available quantity: <label>{{item.qx}}</label></label>
+        <button class="filledsmbtn" id="toCart" onclick="clicked('{{item.id}}', '{{item.username}}', '{{item.itemName}}', '{{item.qx}}')">Add to Cart</button>
+       
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+    var itemList = []
+    function clicked(id, storeName, itemName, actualqx) {
+        var item = {
+            "id" : id,
+            "storeName": storeName,
+            "itemName": itemName,
+            "qx": 1,
+            "actualqx": actualqx
+        }
+        isAlreadyPresent = false
+        itemList.forEach((obj) => {
+            if (id == obj.id) {
+                isAlreadyPresent = true
+            }
+        })
+
+        if (isAlreadyPresent) {
+            window.alert('Its already in the Cart')
+        } else {
+            itemList.push(item);
+            alert('item with ' + id + " " + storeName + " will be added to cart")
+        }
+        // console.log(itemList);
+    }
+
+   document.getElementById("cartbtn").onclick = function () {
+    var data = JSON.stringify(itemList); //it's a list of obj
+    window.location.href="http://127.0.0.1:5000/show/cart/"+data;
+   }
+</script>
+
+{% endblock %}
+

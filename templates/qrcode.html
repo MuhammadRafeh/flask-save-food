@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<title>QRcode</title>
+{% endblock %}
+
+{% block body %}
+<div style="background-color: grey; height: 100vh; display: flex;flex-direction: column;justify-content: center; align-items: center;">
+    <!-- {% if data %}
+        <h1>QR Code halign-self: center;as been downloaded</h1>
+    {% endif %}
+    <button onclick="download()">Download</button> -->
+    <img src="/static/images/qrcode.png" style="width: 30%; height: 50%;"/>
+    <form style="width: 20%;">
+        <a href=# id=test><button type="button" class="btn btn-outline-danger" style="width: 105%; margin-top: 10px; font-weight: bold;">Download</button></a>
+    </form>
+</div>
+
+<script>
+    // function download(){
+    //     window.location.href="http://127.0.0.1:5000/download";
+    //     // alert('downloaded')
+    // }
+    function alerts(){
+        alert('downloaded')
+    }return ("nothing")
+</script>
+<script type=text/javascript>
+        $(function() {
+          $('a#test').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/download',
+                function(data) {
+              //do nothing
+            });
+            alert('downloaded')
+            return false;
+          });
+        });
+</script>
+{% endblock %}

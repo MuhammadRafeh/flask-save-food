@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Item List</title>
+{% endblock %}
+
+{% block body %}
+<div class="header-container">
+    <img src="/static/images/header.jpg" height="400px" width="100%" alt="">
+    <div class="overlay-card">
+        <h3>Item List</h3>
+        <hr>
+        <label>Thanks for supporting</label>
+        <video width="400" height="240" autoplay muted>
+            <source src="/static/video/thanks.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div id="username">Welcome! <label id="usrname">{{usrname}}</label>
+        <button class="filledbtn" id="newitembtn">Add new Item</button>
+    </div>
+</div>
+<ul>
+    {% for item in items %}
+    <li>
+        <h4>{{item.itemName}}</h4>
+        <label>Expiring Date :</label> <label>{{item.expDay}} - {{item.expMonth}} - {{item.expYear}}</label>
+       <span id="inlinerighttag">Available quantity: <label>{{item.qx}}</label></span>
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+    
+    document.getElementById("newitembtn").onclick = function () {
+        var usrname = document.getElementById("usrname").textContent;
+        window.location.href = "http://127.0.0.1:5000/item/"+usrname;
+    }
+</script>
+{% endblock %}

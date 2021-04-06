@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Add Item</title>
+{% endblock %}
+
+{% block body %}
+<div class="header-container">
+    <img src="/static/images/header.jpg" height="400px" width="100%" alt="">
+    <div class="overlay-card">
+        <h3>Add Item</h3>
+        <hr />
+        <input type="text" id="item" placeholder="Item name" />
+        <div>
+            <label for="date">Expiring Date</label>
+        </div>
+        <div>
+            <input name="date" type="number" id="day" placeholder="Day" />
+            <input name="month" type="number" id="month" placeholder="Month" />
+            <input name="year" type="number" id="year" placeholder="Year" />
+        </div>
+        <hr>
+        <div>
+            <input name="date" type="number" id="qx" placeholder="Quantity" />
+        </div>
+        <label for="adate">Available till (optional)</label>
+        <div>
+            <input name="adate" type="number" placeholder="Day" />
+            <input name="amonth" type="number" placeholder="Month" />
+            <input name="ayear" type="number" placeholder="Year" />
+        </div>
+        <button class="filledbtn" id="newitembtn">Add Item</button>
+    </div>
+    <div id="username">Welcome! <label id="usrname">{{usrname}}</label>
+        <button class="filledbtn" id="listbtn">View Item List</button>
+    </div>
+</div>
+<script>
+    document.getElementById("newitembtn").onclick = function () {
+        var username = document.getElementById("usrname").textContent;
+        var item = document.getElementById("item").value;
+        var day = document.getElementById("day").value;
+        var month = document.getElementById("month").value;
+        var year = document.getElementById("year").value;
+        var qx = document.getElementById("qx").value;
+        
+        if (item === "") alert("Please insert item name");
+        else if (day === "" || day <= 0 || day > 31) alert("Please insert valid day");
+        else if (month === "" || month <= 0 || month > 12) alert("Please insert valid month");
+        else if (year === "" || year <= 0 || year < 2021) alert("Please insert valid year");
+        else if (qx === "" || qx <= 0) alert("Please insert quuanatity");
+        else {
+            window.location.href="http://127.0.0.1:5000/add/item/"+username+"/"+item+"/"+day+"/"+month+"/"+year+"/"+qx;
+        }
+
+    }
+    document.getElementById("listbtn").onclick = function () {
+        var usrname = document.getElementById("usrname").textContent;
+        window.location.href = "http://127.0.0.1:5000/list/item/"+usrname;
+    }
+</script>
+{% endblock %}

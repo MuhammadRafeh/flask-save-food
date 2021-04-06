@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Signup</title>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col marginContainer">
+        <h1 class="heading">Signup</h1>
+        <div class="form-group">
+         <label>Full Name</label>
+        <input type="text" placeholder="Name" id="name">
+            </div>
+        <div class="form-group">
+        <label>User Name</label>
+        <input type="text" placeholder="Username" id="usrname">
+             </div>
+        <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Password" id="pass">
+             </div>
+        <div class="form-group">
+        <label>Again Password</label>
+        <input type="password" placeholder="Confirm Password" id="cpass">
+             </div>
+        <div class="form-group">
+        <label>Group</label>
+        <select name="" id="group">
+            <option value="Charity">Charity</option>
+            <option value="Store">Store</option>
+        </select>
+             </div>
+        <button class="filledbtn" id="signup">Signup</button>
+    </div>
+    <div class="col marginContainer">
+        <img src="/static/images/login.png" class="loginimg">
+    </div>
+</div>
+
+<script>
+    document.getElementById("signup").onclick = function () {
+        var name = document.getElementById("name").value;
+        var usrname = document.getElementById("usrname").value;
+        var pass = document.getElementById("pass").value;
+        var cpass = document.getElementById("cpass").value;
+        var group = document.getElementById("group").value;
+
+        if (name === "") alert("Please insert name");
+        else if (usrname === "") alert("Please insert username");
+        else if (pass === "") alert("Please insert password");
+        else if (cpass === "") alert("Please confirm password");
+        else if (group === "") alert("please select group");
+        else if (pass != cpass) alert("Password is not matching in confirm password");
+        else {
+            var link = "http://127.0.0.1:5000/create/" + name + "/" + usrname + "/" + pass + "/" + cpass + "/" + group;
+            window.location.href = link;
+        }
+
+
+
+    }
+</script>
+{% endblock %}
