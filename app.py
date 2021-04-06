@@ -108,6 +108,24 @@ class deletedfooditems(db.Model): #making this model because if foods are empty 
         self.qx = qx
 
 
+class orders(db.Model):
+    id = db.Column(db.Integer, primary_key=True) #id of the charity food owner
+    username = db.Column(db.String(80), unique=True, nullable=False) #username of food owner
+    fullname = db.Column(db.String(120), nullable=False) #it will be the buyer's fullname
+    email = db.Column(db.String(100), nullable=False) #it will be the buyer's email
+    location = db.Column(db.String(200), nullable=False) #it will be the buyer's location
+    contact = db.Column(db.String(20), nullable=False) #it will be the buyer's contact
+
+    def __init__(self, id, username, fullname, email, location, contact):
+        self.id = id
+        self.username = username
+        self.fullname = fullname
+        self.email = email
+        self.location = location
+        self.contact = contact
+
+db.create_all()
+
 @app.route('/')
 def index():
     reg = Registration()
