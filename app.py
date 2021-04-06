@@ -270,8 +270,17 @@ def getLoginStore(username, password, group):
             if password == isFound.password : 
                 items = {}
                 items = fooditem.query.filter_by(username=username).all()
+                if len(items)==0:
+                    items = deletedfooditems.query.filter_by(username=username).all()
                 order = orders.query.filter_by(username=username).all()
-                return render_template("item-list-store.html", usrname=isFound.username, items=items, orders=order)
+                obj = {}
+                for item in order:
+                    try:
+                        value = fooditem.query.filter_by(id=item.fooditemid).first().itemName
+                    except:
+                        value = deletedfooditems.query.filter_by(id=item.fooditemid).first().itemName
+                obj[item.fooditemid] = value
+                return render_template("item-list-store.html", usrname=isFound.username, items=items, orders=order, foodnames=obj)
             else : return render_template("pass-not-match.html")
         else: return render_template("user-not-found.html")
     elif group == "Charity":
@@ -296,7 +305,17 @@ def listitem(username):
     items = {}
     items = fooditem.query.filter_by(username=username).all()
     order = orders.query.filter_by(username=username).all()
-    return render_template("item-list-store.html", usrname=username, items=items, orders=order)
+    if len(items)==0: #if food is not in footitem it's mean everyfood has taken by someone.
+        items = deletedfooditems.query.filter_by(username=username).all()
+    obj = {}
+    for item in order:
+        try:
+            value = fooditem.query.filter_by(id=item.fooditemid).first().itemName
+        except:
+            value = deletedfooditems.query.filter_by(id=item.fooditemid).first().itemName
+        obj[item.fooditemid] = value
+    # print(obj)
+    return render_template("item-list-store.html", usrname=username, items=items, orders=order, foodnames=obj)
 
 
 @app.route('/add/item/<username>/<itemName>/<expDay>/<expMonth>/<expYear>/<qx>')
@@ -333,7 +352,7 @@ def genrateQR(data):
         elif int(obj['qx']) == item.qx: #if user has selected whole item
             # item.qx = item.qx - int(obj['qx'])
             # db.session.commit()
-            deletefooditem = deletedfooditems(item.id, item.username, item.itemName, item.expDay, item.expMonth, item.expYear, item.qx)
+            deletefooditem = deletedfooditems(item.id, item.username, item.itemName, item.expDay, item.expMonth, item.expYear, 0)
             db.session.add(deletefooditem)
             # db.session.commit()
             db.session.delete(item)
