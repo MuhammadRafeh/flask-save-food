@@ -108,21 +108,24 @@ class deletedfooditems(db.Model): #making this model because if foods are empty 
         self.qx = qx
 
 
-class orders(db.Model):
-    id = db.Column(db.Integer, primary_key=True) #id of the charity food owner
-    username = db.Column(db.String(80), unique=True, nullable=False) #username of food owner
+class orders(db.Model): #username of owner's food that's unique.
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False) #username of food owner
     fullname = db.Column(db.String(120), nullable=False) #it will be the buyer's fullname
     email = db.Column(db.String(100), nullable=False) #it will be the buyer's email
     location = db.Column(db.String(200), nullable=False) #it will be the buyer's location
     contact = db.Column(db.String(20), nullable=False) #it will be the buyer's contact
+    fooditemid = db.Column(db.Integer, nullable=False) #it will be the food item id which buyer has get
+    quantityoffood = db.Column(db.String(1000), nullable=False) #it will be the food item quantity
 
-    def __init__(self, id, username, fullname, email, location, contact):
-        self.id = id
+    def __init__(self, username, fullname, email, location, contact, fooditemid, quantityoffood):
         self.username = username
         self.fullname = fullname
         self.email = email
         self.location = location
         self.contact = contact
+        self.fooditemid = fooditemid
+        self.quantityoffood = quantityoffood
 
 db.create_all()
 
@@ -149,9 +152,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+# @app.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
@@ -177,11 +180,10 @@ def upload_file():
 
 # ---------------------------------
 
-# ---------------------------------------------
+# ---------------------------------------------DISPLAY
 
 @app.route('/uploader/display/<filename>')
 def display(filename):
-
     result = decode(Image.open('static/uploads/'+filename))
     data = result[0].data.decode()
     list_of_data = [] #[{id, qx}, {id, qx}, ...]
@@ -198,21 +200,39 @@ def display(filename):
         except:
             item = deletedfooditems.query.filter_by(id=obj['id']).first()
             new_data.append({"id":item.id,"username":item.username,"itemName":item.itemName,"expDay":item.expDay,"expMonth":item.expMonth,"expYear":item.expYear,"qx":obj['qx']})
-
-
-
-
+            #obj['qx'] it's the quantity that user has selected.
     print(new_data)
     #properties
-    # id 
+    # id
     # username
     # itemName
     # expDay
     # expMonth
     # expYear
     # qx
-    return render_template("display.html", data=new_data)
+    same_data_with_json = json.dumps(new_data)
+    return render_template("display.html", data=new_data, data_json=same_data_with_json)
 
+
+@app.route('/uploader/dis/<data_json>', methods = ['GET', 'POST'])
+def acceptedForm(data_json):
+    if request.method == 'POST':
+        #format of data_json
+        #[{'id': 12, 'username': 'rafeh', 'itemName': 'bergers', 'expDay': 5, 'expMonth': 4, 'expYear': 2022, 'qx': '5'}]
+        data=json.loads(data_json) #list
+        print('asdasdasdasdasdasdasd',data)
+        fullname = request.form['full_name']
+        email = request.form['email']
+        location = request.form['location']
+        phone = request.form['phone']
+        # (username, fullname, email, location, contact, fooditemid, quantityoffood)
+        for item in data:
+            order = orders(item['username'], fullname, email, location, phone, item['id'], item['qx'])
+            db.session.add(order)
+        db.session.commit()
+        return redirect(request.url)
+    else:
+        return '404 PAGE NOT FOUND'
 
 
 # ---------------------------------------------
