@@ -88,6 +88,26 @@ class fooditem(db.Model):
         self.expYear = expYear
         self.qx = qx
 
+class deletedfooditems(db.Model): #making this model because if foods are empty then we might have something in database that this was something food we have in db
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    itemName = db.Column(db.String(120), nullable=False)
+    expDay = db.Column(db.Integer, nullable=False)
+    expMonth = db.Column(db.Integer, nullable=False)
+    expYear = db.Column(db.Integer, nullable=False)
+    qx = db.Column(db.Integer, nullable=False)
+
+
+    def __init__(self, id, username, itemName, expDay, expMonth, expYear, qx):
+        self.id = id
+        self.username = username
+        self.itemName = itemName
+        self.expDay = expDay
+        self.expMonth = expMonth
+        self.expYear = expYear
+        self.qx = qx
+
+
 @app.route('/')
 def index():
     reg = Registration()
@@ -154,8 +174,15 @@ def display(filename):
 
     new_data = [] # [{all of properties which are given below}, ...]
     for obj in list_of_data:
-        item = fooditem.query.filter_by(id=obj['id']).first()
-        new_data.append({"id":item.id,"username":item.username,"itemName":item.itemName,"expDay":item.expDay,"expMonth":item.expMonth,"expYear":item.expYear,"qx":obj['qx']})
+        try:
+            item = fooditem.query.filter_by(id=obj['id']).first()
+            new_data.append({"id":item.id,"username":item.username,"itemName":item.itemName,"expDay":item.expDay,"expMonth":item.expMonth,"expYear":item.expYear,"qx":obj['qx']})
+        except:
+            item = deletedfooditems.query.filter_by(id=obj['id']).first()
+            new_data.append({"id":item.id,"username":item.username,"itemName":item.itemName,"expDay":item.expDay,"expMonth":item.expMonth,"expYear":item.expYear,"qx":obj['qx']})
+
+
+
 
     print(new_data)
     #properties
@@ -263,7 +290,15 @@ def genrateQR(data):
         if int(obj['qx']) < item.qx:
             item.qx = item.qx - int(obj['qx'])
             db.session.commit()
-        elif int(obj['qx']) == item.qx:
+        elif int(obj['qx']) == item.qx: #if user has selected whole item
+            # item.qx = item.qx - int(obj['qx'])
+            # db.session.commit()
+            deletefooditem = deletedfooditems(item.id, item.username, item.itemName, item.expDay, item.expMonth, item.expYear, item.qx)
+            db.session.add(deletefooditem)
+            # db.session.commit()
+            db.session.delete(item)
+            db.session.commit()
+        else:
             db.session.delete(item)
             db.session.commit()
 
