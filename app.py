@@ -17,7 +17,8 @@ from pyzbar.pyzbar import decode
 
 sys.path.insert(0, sys.path[0]+'\\classes')
 
-UPLOAD_FOLDER = "/home/muhammad/Desktop/Working Areas/flask-save-food/static/uploads"
+
+UPLOAD_FOLDER = os.path.abspath(os.getcwd())+'/static/uploads'#get absolute path + adding path to uploads directory
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
