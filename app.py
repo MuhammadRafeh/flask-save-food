@@ -270,7 +270,8 @@ def getLoginStore(username, password, group):
             if password == isFound.password : 
                 items = {}
                 items = fooditem.query.filter_by(username=username).all()
-                return render_template("item-list-store.html", usrname=isFound.username, items=items)
+                order = orders.query.filter_by(username=username).all()
+                return render_template("item-list-store.html", usrname=isFound.username, items=items, orders=order)
             else : return render_template("pass-not-match.html")
         else: return render_template("user-not-found.html")
     elif group == "Charity":
