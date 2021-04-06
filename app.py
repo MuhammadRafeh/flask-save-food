@@ -18,7 +18,7 @@ from pyzbar.pyzbar import decode
 sys.path.insert(0, sys.path[0]+'\\classes')
 
 
-UPLOAD_FOLDER = os.path.abspath(os.getcwd())+'/static/uploads'#get absolute path + adding path to uploads directory
+UPLOAD_FOLDER = os.path.abspath(os.getcwd())+'/static/uploads'  #get absolute path + adding path to uploads directory
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
@@ -259,6 +259,14 @@ def genrateQR(data):
     items = json.loads(data) #[{id, qx},...]
     code = ''
     for obj in items:
+        item = fooditem.query.filter_by(id=obj['id']).first()
+        if int(obj['qx']) < item.qx:
+            item.qx = item.qx - int(obj['qx'])
+            db.session.commit()
+        elif int(obj['qx']) == item.qx:
+            db.session.delete(item)
+            db.session.commit()
+
         # print(obj)
         string = "{}|{},".format(obj['id'], obj['qx'])
         code+=string
