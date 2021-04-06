@@ -19,6 +19,17 @@
         <button class="filledbtn" id="newitembtn">Add new Item</button>
     </div>
 </div>
+<h2>Orders</h2>
+<ul>
+    {% for item in orders %}
+        <li>{{item.fullname}}</li>
+        <li>{{item.email}}</li>
+        <li>{{item.location}}</li>
+        <li>{{item.contact}}</li>
+        <hr>
+    {% endfor %}
+</ul>
+<hr>
 <ul>
     {% for item in items %}
     <li>

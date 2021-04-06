@@ -289,12 +289,13 @@ def getLoginStore(username, password, group):
 def item(username):
     return render_template("add-item-store.html", usrname=username)
 
-
+# ////////////////////////////////////////////////TODO////////////////////////////////////////////////
 @app.route('/list/item/<username>')
 def listitem(username):
     items = {}
     items = fooditem.query.filter_by(username=username).all()
-    return render_template("item-list-store.html", usrname=username, items=items)
+    order = orders.query.filter_by(username=username).all()
+    return render_template("item-list-store.html", usrname=username, items=items, orders=order)
 
 
 @app.route('/add/item/<username>/<itemName>/<expDay>/<expMonth>/<expYear>/<qx>')
