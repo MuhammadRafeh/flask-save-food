@@ -127,7 +127,7 @@ class orders(db.Model): #username of owner's food that's unique.
         self.fooditemid = fooditemid
         self.quantityoffood = quantityoffood
 
-db.create_all()
+# db.create_all()
 
 @app.route('/')
 def index():
@@ -232,7 +232,7 @@ def acceptedForm(data_json):
         db.session.commit()
         return redirect(request.url)
     else:
-        return '404 PAGE NOT FOUND'
+        return 'Thanks for submitting your form'
 
 
 # ---------------------------------------------
