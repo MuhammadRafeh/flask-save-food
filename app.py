@@ -274,12 +274,13 @@ def getLoginStore(username, password, group):
                     items = deletedfooditems.query.filter_by(username=username).all()
                 order = orders.query.filter_by(username=username).all()
                 obj = {}
+                value = []
                 for item in order:
                     try:
                         value = fooditem.query.filter_by(id=item.fooditemid).first().itemName
                     except:
                         value = deletedfooditems.query.filter_by(id=item.fooditemid).first().itemName
-                obj[item.fooditemid] = value
+                    obj[item.fooditemid] = value
                 return render_template("item-list-store.html", usrname=isFound.username, items=items, orders=order, foodnames=obj)
             else : return render_template("pass-not-match.html")
         else: return render_template("user-not-found.html")
