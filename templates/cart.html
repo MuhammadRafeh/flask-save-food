@@ -87,6 +87,11 @@ datas.forEach((obj) => {
 
 const final = JSON.stringify(finalData)
 
+if (finalData.length == 0){
+    alert("You must have to include 1 item in your cart")
+    return;
+}
+
 window.location.href="http://127.0.0.1:5000/qr/"+final;
 
 
